@@ -3,7 +3,7 @@
 A simple tool for analyzing, saving, constructing linear regression.
 
 ## Installation
-'''python
+```bash
 
 git clone https://github.com/nietza/regression-builder
 
@@ -14,8 +14,7 @@ pip install requierments.txt
 #main file is rgr.py
 
 python rgr.py
-
-'''
+```
 
 ## Features
 
