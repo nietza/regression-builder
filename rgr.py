@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import pandas as pd
+from tkinter import filedialog
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -178,8 +180,77 @@ class RegressionManager:
         ttk.Button(button_frame, text="Load Graph", style='secondary.TButton', 
                 command=self.load_graph, width=15).pack(pady=5)
         
+        ttk.Button(button_frame,text="Import Data",style='info.TButton',
+                command=self.import_data,width=20).pack(pady=5)
         return frame
+   
+    def import_data(self):
+        file_types = [
+            ('Excel files', '*.xlsx *.xls'),
+            ('CSV files', '*.csv'),
+            ('All files', '*.*')
+        ]
+        
+        file_path = filedialog.askopenfilename(
+            title="Select file",
+            filetypes=file_types
+        )
+        
+        if not file_path:
+            return
+            
+        try:
+            file_extension = file_path.split('.')[-1].lower()
+            
+            if file_extension in ['xlsx', 'xls']:
+                df = pd.read_excel(file_path)
+            elif file_extension == 'csv':
+                df = pd.read_csv(file_path)
+            else:
+                raise ValueError("Unsupported file format")
 
+            columns = df.columns.tolist()
+            column_window = ttk.Toplevel(self.root)
+            column_window.title("Select Columns")
+            column_window.geometry("400x300")
+            
+            x_var = tk.StringVar()
+            y_var = tk.StringVar()
+            ttk.Label(column_window, text="Select X column:").pack(pady=5)
+            x_combo = ttk.Combobox(column_window, textvariable=x_var, values=columns)
+            x_combo.pack(pady=5)
+            ttk.Label(column_window, text="Select Y column:").pack(pady=5)
+            y_combo = ttk.Combobox(column_window, textvariable=y_var, values=columns)
+            y_combo.pack(pady=5)
+            
+            def apply_selection():
+                x_col = x_var.get()
+                y_col = y_var.get()
+                
+                if x_col and y_col:
+
+                    self.x_values.delete(0, tk.END)
+                    self.x_values.insert(0, ' '.join(map(str, df[x_col].tolist())))
+                    self.y_values.delete(0, tk.END)
+                    self.y_values.insert(0, ' '.join(map(str, df[y_col].tolist())))
+                    self.x_axis_name.delete(0, tk.END)
+                    self.x_axis_name.insert(0, x_col)
+                    self.y_axis_name.delete(0, tk.END)
+                    self.y_axis_name.insert(0, y_col)
+                    column_window.destroy()
+            
+            ttk.Button(
+                column_window,
+                text="Apply",
+                style='primary.TButton',
+                command=apply_selection
+            ).pack(pady=20)
+            
+        except Exception as e:
+            Messagebox.show_error(
+                f"Error importing data: {str(e)}",
+                "Error"
+            )
     def handle_paste(self, event):
         try:
             clipboard = event.widget.clipboard_get()
@@ -786,7 +857,7 @@ class RegressionManager:
     def show_about(self):
         about_window = ttk.Toplevel(self.root)
         about_window.title("About")
-        about_window.geometry("400x350")
+        about_window.geometry("500x350")
         
         content_frame = ttk.Frame(about_window, padding=20)
         content_frame.pack(fill=tk.BOTH, expand=True)
@@ -815,6 +886,7 @@ class RegressionManager:
             "• Dark Mode",
             "• Save and load regression models",
             "• Export high-quality graphs",
+            "• Import data .xlsx .xls .csv",
             "• Fucking hell"
         ]
         
