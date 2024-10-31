@@ -148,65 +148,46 @@ class RegressionManager:
         right_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(20, 0))
 
     def create_input_panel(self, parent):
-        frame = ttk.LabelFrame(
-            parent,
-            text="Input Data",
-            padding=15,
-            width=300
-        )
+        frame = ttk.LabelFrame(parent, text="Input Data", padding=15, width=300)
         
-        ttk.Label(
-            frame,
-            text="X Axis Name"
-        ).pack(anchor=tk.W, pady=(0, 5))
-        
+        ttk.Label(frame, text="X Axis Name").pack(anchor=tk.W, pady=(0, 5))
         self.x_axis_name = ttk.Entry(frame, width=30)
         self.x_axis_name.pack(fill=tk.X, pady=(0, 15))
         
-        ttk.Label(
-            frame,
-            text="Y Axis Name"
-        ).pack(anchor=tk.W, pady=(0, 5))
-        
+        ttk.Label(frame, text="Y Axis Name").pack(anchor=tk.W, pady=(0, 5))
         self.y_axis_name = ttk.Entry(frame, width=30)
         self.y_axis_name.pack(fill=tk.X, pady=(0, 15))
         
-        ttk.Label(
-            frame,
-            text="X Values (space-separated)"
-        ).pack(anchor=tk.W, pady=(0, 5))
-        
+        ttk.Label(frame, text="X Values (space-separated)").pack(anchor=tk.W, pady=(0, 5))
         self.x_values = ttk.Entry(frame, width=30)
         self.x_values.pack(fill=tk.X, pady=(0, 15))
         
-        ttk.Label(
-            frame,
-            text="Y Values (space-separated)"
-        ).pack(anchor=tk.W, pady=(0, 5))
-        
+        ttk.Label(frame, text="Y Values (space-separated)").pack(anchor=tk.W, pady=(0, 5))
         self.y_values = ttk.Entry(frame, width=30)
         self.y_values.pack(fill=tk.X, pady=(0, 15))
+        
+        for entry in [self.x_values, self.y_values, self.x_axis_name, self.y_axis_name]:
+            entry.bind('<Control-v>', lambda e: self.handle_paste(e))
         
         button_frame = ttk.Frame(frame)
         button_frame.pack(fill=tk.X, pady=(20, 0))
         
-        ttk.Button(
-            button_frame,
-            text="Save Graph",
-            style='primary.TButton',
-            command=self.save_graph,
-            width=15
-        ).pack(pady=5)
+        ttk.Button(button_frame, text="Save Graph", style='primary.TButton', 
+                command=self.save_graph, width=15).pack(pady=5)
         
-        ttk.Button(
-            button_frame,
-            text="Load Graph",
-            style='secondary.TButton',
-            command=self.load_graph,
-            width=15
-        ).pack(pady=5)
+        ttk.Button(button_frame, text="Load Graph", style='secondary.TButton', 
+                command=self.load_graph, width=15).pack(pady=5)
         
         return frame
+
+    def handle_paste(self, event):
+        try:
+            clipboard = event.widget.clipboard_get()
+            event.widget.delete(0, tk.END)
+            event.widget.insert(0, clipboard)
+            return 'break'
+        except:
+            pass
 
     def create_graph_panel(self, parent):
         frame = ttk.LabelFrame(
