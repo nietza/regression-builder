@@ -11,9 +11,7 @@ cd regression-builder
 
 pip install requierments.txt
 
-#main file is rgr.py
-
-python rgr.py
+python main.py
 ```
 
 ## Features
@@ -21,5 +19,5 @@ python rgr.py
 - Analyze linear regression models
 - Save regression results
 - Construct custom linear regression models
-- idk
+- data import/export 
 
