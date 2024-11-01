@@ -9,7 +9,7 @@ git clone https://github.com/nietza/regression-builder
 
 cd regression-builder
 
-pip install requierments.txt
+pip install -r requierments.txt
 
 python main.py
 ```
