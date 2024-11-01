@@ -152,6 +152,10 @@ class RegressionManager:
     def create_input_panel(self, parent):
         frame = ttk.LabelFrame(parent, text="Input Data", padding=15, width=300)
         
+        # Import data button moved to top
+        ttk.Button(frame, text="Import data", style='info.TButton',
+                command=self.import_data, width=20).pack(pady=(0, 15))
+        
         ttk.Label(frame, text="X Axis Name").pack(anchor=tk.W, pady=(0, 5))
         self.x_axis_name = ttk.Entry(frame, width=30)
         self.x_axis_name.pack(fill=tk.X, pady=(0, 15))
@@ -180,8 +184,6 @@ class RegressionManager:
         ttk.Button(button_frame, text="Load Graph", style='secondary.TButton', 
                 command=self.load_graph, width=15).pack(pady=5)
         
-        ttk.Button(button_frame,text="Import Data",style='info.TButton',
-                command=self.import_data,width=20).pack(pady=5)
         return frame
    
     def import_data(self):
