@@ -4,4 +4,8 @@ matplotlib
 numpy
 scipy
 Pillow
+<<<<<<< HEAD
 ttkbootstrap
+=======
+ttkbootstrap
+>>>>>>> b981651f26941b002af3301e739bbb8815b7af0c
